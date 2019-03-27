@@ -9,6 +9,7 @@ import {
   ComponentFactoryResolver
 } from '@angular/core';
 import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { NgxBootstrapPopupPlaceholderComponent } from './ngx-bootstrap-popup-placeholder.component';
 
 import { IPopupOptions } from './shared';
@@ -19,16 +20,24 @@ export abstract class NgxBootstrapPopup implements OnInit, OnDestroy {
   private _ngUnsubscribe: Subject<void> = new Subject();
   protected events: EventEmitter<Event>;
   private _showing = false;
+  private _titleComponentRef: ComponentRef<NgxBootstrapPopupPlaceholderComponent>;
+  private _contentComponentRef: ComponentRef<NgxBootstrapPopupPlaceholderComponent>;
+
   abstract popupType: 'popover' | 'tooltip';
   abstract title: string | TemplateRef<any>;
   abstract content: string | TemplateRef<any>;
   abstract options: IPopupOptions;
   abstract enabled: boolean;
   abstract dismissOnClickOutside: boolean;
-  titleComponentRef: ComponentRef<NgxBootstrapPopupPlaceholderComponent>;
-  contentComponentRef: ComponentRef<NgxBootstrapPopupPlaceholderComponent>;
+
+  get titleComponentRef(): ComponentRef<NgxBootstrapPopupPlaceholderComponent> {
+    return this._titleComponentRef;
+  }
+  get contentComponentRef(): ComponentRef<NgxBootstrapPopupPlaceholderComponent> {
+    return this._contentComponentRef;
+  }
   bsEventListener: any;
-  clickDismissListener: any;
+  clickDismissListener: any = null;
 
   constructor(
     private _elementRef: ElementRef,
@@ -103,6 +112,8 @@ export abstract class NgxBootstrapPopup implements OnInit, OnDestroy {
         this._showing = true;
       }
       if (event.type === 'hidden') {
+        jQuery('body').off('click focusin', this.clickDismissListener);
+        this.clickDismissListener = null;
         this._showing = false;
       }
       this.events.emit(event);
@@ -116,13 +127,13 @@ export abstract class NgxBootstrapPopup implements OnInit, OnDestroy {
   getOptions(): any {
     const options: any = Object.assign({}, this.options);
     if (this.title) {
-      this.titleComponentRef = this.getPlaceholderComponent();
+      this._titleComponentRef = this.getPlaceholderComponent();
       this.titleComponentRef.instance.inserted = this.title;
       options.title = this.titleComponentRef.instance.insertedContent.nativeElement;
       options.html = true;
     }
     if (this.content) {
-      this.contentComponentRef = this.getPlaceholderComponent();
+      this._contentComponentRef = this.getPlaceholderComponent();
       this.contentComponentRef.instance.inserted = this.content;
       options.content = this.contentComponentRef.instance.insertedContent.nativeElement;
       options.html = true;
@@ -133,7 +144,9 @@ export abstract class NgxBootstrapPopup implements OnInit, OnDestroy {
   getPlaceholderComponent(): ComponentRef<NgxBootstrapPopupPlaceholderComponent> {
     const factory = this.cfr.resolveComponentFactory(NgxBootstrapPopupPlaceholderComponent);
     const ref = this.vcr.createComponent(factory, 0);
-    ref.instance.contentChanged.subscribe(() => {
+    ref.instance.contentChanged
+    .pipe(takeUntil(this._ngUnsubscribe))
+    .subscribe(() => {
       if (this.showing) {
         this.update();
       }

@@ -39,7 +39,7 @@ export class NgxBootstrapTooltipDirective extends NgxBootstrapPopup implements O
     return null;
   }
   get title(): string | TemplateRef<any>  {
-      return this.tooltipTitle || null;
+    return this.tooltipTitle || null;
   }
 
   get dismissOnClickOutside(): boolean {
@@ -51,7 +51,7 @@ export class NgxBootstrapTooltipDirective extends NgxBootstrapPopup implements O
   }
 
   get options(): IPopupOptions {
-    return this.tooltipOptions;
+    return this.tooltipOptions || null;
   }
 
   ngOnChanges(changes: SimpleChanges) {

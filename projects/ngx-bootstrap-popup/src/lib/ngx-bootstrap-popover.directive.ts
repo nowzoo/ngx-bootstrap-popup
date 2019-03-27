@@ -54,7 +54,7 @@ export class NgxBootstrapPopoverDirective extends NgxBootstrapPopup implements O
   }
 
   get options(): IPopupOptions {
-    return this.popoverOptions;
+    return this.popoverOptions || null;
   }
 
   ngOnChanges(changes: SimpleChanges) {
