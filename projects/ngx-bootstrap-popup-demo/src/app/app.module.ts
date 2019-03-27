@@ -10,6 +10,7 @@ import { DemoTooltipOptionsComponent } from './demo-tooltip-options/demo-tooltip
 import { DemoPopoverStringComponent } from './demo-popover-string/demo-popover-string.component';
 import { DemoTooltipDismissComponent } from './demo-tooltip-dismiss/demo-tooltip-dismiss.component';
 import { DemoPopoverDynamicStringComponent } from './demo-popover-dynamic-string/demo-popover-dynamic-string.component';
+import { DemoPopoverTemplateComponent } from './demo-popover-template/demo-popover-template.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { DemoPopoverDynamicStringComponent } from './demo-popover-dynamic-string
     DemoPopoverStringComponent,
     DemoTooltipDismissComponent,
     DemoPopoverDynamicStringComponent,
+    DemoPopoverTemplateComponent,
   ],
   imports: [
     BrowserModule,
