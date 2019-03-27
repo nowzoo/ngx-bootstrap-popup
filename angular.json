@@ -52,7 +52,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/ngx-bootstrap-popup-demo",
+            "outputPath": "docs",
             "index": "projects/ngx-bootstrap-popup-demo/src/index.html",
             "main": "projects/ngx-bootstrap-popup-demo/src/main.ts",
             "polyfills": "projects/ngx-bootstrap-popup-demo/src/polyfills.ts",
