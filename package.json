@@ -7,7 +7,9 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build-lib": "ng build ngx-bootstrap-popup && cp LICENSE README.md ./dist/ngx-bootstrap-popup",
+    "build-demo": "ng build  ngx-bootstrap-popup-demo --aot --prod --base-href /ngx-bootstrap-popup/"
   },
   "private": true,
   "dependencies": {
