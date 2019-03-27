@@ -58,6 +58,7 @@ MIT
 MIT
 
 @nowzoo/ngx-bootstrap-popup
+MIT
 
 core-js
 MIT
