@@ -4,12 +4,22 @@ import { NgxBootstrapPopupModule } from '@nowzoo/ngx-bootstrap-popup';
 import { AppComponent } from './app.component';
 import { DemoTooltipStringComponent } from './demo-tooltip-string/demo-tooltip-string.component';
 import { DemoTooltipTemplateComponent } from './demo-tooltip-template/demo-tooltip-template.component';
+import { DemoTooltipDynamicStringComponent } from './demo-tooltip-dynamic-string/demo-tooltip-dynamic-string.component';
+import { DemoTooltipDataAttributesComponent } from './demo-tooltip-data-attributes/demo-tooltip-data-attributes.component';
+import { DemoTooltipOptionsComponent } from './demo-tooltip-options/demo-tooltip-options.component';
+import { DemoPopoverStringComponent } from './demo-popover-string/demo-popover-string.component';
+import { DemoTooltipDismissComponent } from './demo-tooltip-dismiss/demo-tooltip-dismiss.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DemoTooltipStringComponent,
-    DemoTooltipTemplateComponent
+    DemoTooltipTemplateComponent,
+    DemoTooltipDynamicStringComponent,
+    DemoTooltipDataAttributesComponent,
+    DemoTooltipOptionsComponent,
+    DemoPopoverStringComponent,
+    DemoTooltipDismissComponent,
   ],
   imports: [
     BrowserModule,

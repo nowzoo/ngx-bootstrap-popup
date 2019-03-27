@@ -5,14 +5,21 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
   styleUrls: ['./demo-tooltip-template.component.scss']
 })
 export class DemoTooltipTemplateComponent implements OnInit, OnDestroy {
-  name = 'Guy';
+  name = 'World';
   time: string;
+  dots: string;
   interval: any;
   constructor() { }
 
   ngOnInit() {
+    this.dots = '';
     this.time = new Date().toLocaleTimeString();
     this.interval = setInterval(() => {
+      if (this.dots.length < 30) {
+        this.dots += '.';
+      } else {
+        this.dots = '';
+      }
       this.time = new Date().toLocaleTimeString();
     }, 1000);
   }

@@ -11,4 +11,5 @@ export interface IPopupOptions {
     offset?: number | string;
     fallbackPlacement?: string | string[];
     boundary?: string | HTMLElement;
+    trigger: string;
 }

@@ -1,9 +1,9 @@
-import { Component, TemplateRef, ElementRef, ViewChild } from '@angular/core';
+import { Component, TemplateRef, ElementRef, ViewChild, Output, EventEmitter} from '@angular/core';
 
 @Component({
   selector: 'ngx-bootstrap-popup-placeholder',
   template: `
-    <div #insertedContent>
+    <div #insertedContent (cdkObserveContent)="contentChanged.emit($event)">
       <ng-container *ngTemplateOutlet="template"></ng-container>
     </div>
     <ng-template #defaultTemplate>{{inserted}}</ng-template>
@@ -13,7 +13,7 @@ import { Component, TemplateRef, ElementRef, ViewChild } from '@angular/core';
 export class NgxBootstrapPopupPlaceholderComponent {
   @ViewChild('defaultTemplate') defaultTemplate: TemplateRef<any>;
   @ViewChild('insertedContent') insertedContent: ElementRef;
-
+  contentChanged: EventEmitter<any> = new EventEmitter();
 
   private _inserted: string | TemplateRef<any>;
   private _template: TemplateRef<any>;

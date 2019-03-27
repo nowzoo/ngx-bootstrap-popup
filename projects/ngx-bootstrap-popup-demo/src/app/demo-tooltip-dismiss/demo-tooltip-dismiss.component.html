@@ -1,0 +1,23 @@
+<a name="dismiss-demo"></a>
+<button type="button" class="btn btn-primary mr-4"
+  ngxBootstrapTooltip
+  [tooltipTitle]="titleTemplate1"
+  data-trigger="click">
+  Tooltip (click)
+</button>
+<ng-template #titleTemplate1>
+  Clicking outside the tooltip will dismiss the tooltip.
+  <a>Clicking here</a> won’t dismiss the tooltip.
+</ng-template>
+
+<button type="button" class="btn btn-primary"
+  ngxBootstrapTooltip
+  [tooltipTitle]="titleTemplate2"
+  data-trigger="click"
+  [tooltipDismissOnClickOutside]="false">
+  Tooltip (click)
+</button>
+<ng-template #titleTemplate2>
+  Clicking outside the tooltip won’t dismiss the tooltip.
+  <a>Clicking here</a> won’t dismiss the tooltip, either.
+</ng-template>

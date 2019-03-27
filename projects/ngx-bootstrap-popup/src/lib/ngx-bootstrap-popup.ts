@@ -8,6 +8,7 @@ import {
   ViewContainerRef,
   ComponentFactoryResolver
 } from '@angular/core';
+import { Subject } from 'rxjs';
 import { NgxBootstrapPopupPlaceholderComponent } from './ngx-bootstrap-popup-placeholder.component';
 
 import { IPopupOptions } from './shared';
@@ -15,8 +16,9 @@ import { IPopupOptions } from './shared';
 declare const jQuery: any;
 
 export abstract class NgxBootstrapPopup implements OnInit, OnDestroy {
-
+  private _ngUnsubscribe: Subject<void> = new Subject();
   protected events: EventEmitter<Event>;
+  private _showing = false;
   abstract popupType: 'popover' | 'tooltip';
   abstract title: string | TemplateRef<any>;
   abstract content: string | TemplateRef<any>;
@@ -53,7 +55,11 @@ export abstract class NgxBootstrapPopup implements OnInit, OnDestroy {
   }
 
   get bsInstance(): any {
-      return this.$el.data('bs.' + this.popupType);
+    return this.$el.data('bs.' + this.popupType);
+  }
+
+  get showing(): boolean {
+    return this._showing;
   }
 
   get jQueryEvents(): string {
@@ -65,6 +71,8 @@ export abstract class NgxBootstrapPopup implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this._ngUnsubscribe.next();
+    this._ngUnsubscribe.complete();
     this.$el[this.popupType]('dispose');
     this.$el.off(this.jQueryEvents, this.bsEventListener);
     if (this.clickDismissListener) {
@@ -79,24 +87,30 @@ export abstract class NgxBootstrapPopup implements OnInit, OnDestroy {
   }
 
   create() {
-      this.bsEventListener = ((event) => {
-          if (this.dismissOnClickOutside && event.type === 'shown') {
-              this.clickDismissListener = ((clickEvent) => {
-                  if (this.bsInstance.tip.contains(clickEvent.target)) {
-                      return;
-                  }
-                  jQuery('body').off('click focusin', this.clickDismissListener);
-                  this.clickDismissListener = null;
-                  this.hide();
-              });
-              jQuery('body').on('click focusin', this.clickDismissListener);
+    this.bsEventListener = ((event: Event) => {
+      if (this.dismissOnClickOutside && event.type === 'shown') {
+        this.clickDismissListener = ((clickEvent: Event) => {
+          if (this.bsInstance.tip.contains(clickEvent.target)) {
+            return;
           }
-          this.events.emit(event);
-      });
-      this.$el.on(this.jQueryEvents, this.bsEventListener);
-      const options = this.getOptions();
-      this.$el[this.popupType](options);
-      this.updateEnabled();
+          jQuery('body').off('click focusin', this.clickDismissListener);
+          this.clickDismissListener = null;
+          this.hide();
+        });
+        jQuery('body').on('click focusin', this.clickDismissListener);
+      }
+      if (event.type === 'show') {
+        this._showing = true;
+      }
+      if (event.type === 'hidden') {
+        this._showing = false;
+      }
+      this.events.emit(event);
+    });
+    this.$el.on(this.jQueryEvents, this.bsEventListener);
+    const options = this.getOptions();
+    this.$el[this.popupType](options);
+    this.updateEnabled();
   }
 
   getOptions(): any {
@@ -118,7 +132,13 @@ export abstract class NgxBootstrapPopup implements OnInit, OnDestroy {
 
   getPlaceholderComponent(): ComponentRef<NgxBootstrapPopupPlaceholderComponent> {
     const factory = this.cfr.resolveComponentFactory(NgxBootstrapPopupPlaceholderComponent);
-    return this.vcr.createComponent(factory, 0);
+    const ref = this.vcr.createComponent(factory, 0);
+    ref.instance.contentChanged.subscribe(() => {
+      if (this.showing) {
+        this.update();
+      }
+    });
+    return ref;
   }
 
   show() {
@@ -155,13 +175,11 @@ export abstract class NgxBootstrapPopup implements OnInit, OnDestroy {
   updateTitle() {
     if (this.titleComponentRef && this.title) {
       this.titleComponentRef.instance.inserted = this.title;
-      this.update();
     }
   }
   updateContent() {
     if (this.contentComponentRef && this.content) {
       this.contentComponentRef.instance.inserted = this.content;
-      this.update();
     }
   }
   updateEnabled() {
