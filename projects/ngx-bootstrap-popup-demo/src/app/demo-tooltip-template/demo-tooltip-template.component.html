@@ -1,0 +1,6 @@
+<button type="button" class="btn btn-primary" ngxBootstrapTooltip [tooltipTitle]="titleTemplate">
+  Tooltip from Template
+</button>
+<ng-template #titleTemplate>
+  Hello {{name}}! It is {{time}}.
+</ng-template>

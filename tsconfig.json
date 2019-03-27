@@ -17,6 +17,14 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@nowzoo/ngx-bootstrap-popup": [
+        "dist/ngx-bootstrap-popup"
+      ],
+      "@nowzoo/ngx-bootstrap-popup/*": [
+        "dist/ngx-bootstrap-popup/*"
+      ]
+    }
   }
 }

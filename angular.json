@@ -2,5 +2,178 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "projects",
-  "projects": {}
+  "projects": {
+    "ngx-bootstrap-popup": {
+      "root": "projects/ngx-bootstrap-popup",
+      "sourceRoot": "projects/ngx-bootstrap-popup/src",
+      "projectType": "library",
+      "prefix": "ngx",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ngx-bootstrap-popup/tsconfig.lib.json",
+            "project": "projects/ngx-bootstrap-popup/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-bootstrap-popup/src/test.ts",
+            "tsConfig": "projects/ngx-bootstrap-popup/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-bootstrap-popup/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-bootstrap-popup/tsconfig.lib.json",
+              "projects/ngx-bootstrap-popup/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "ngx-bootstrap-popup-demo": {
+      "root": "projects/ngx-bootstrap-popup-demo/",
+      "sourceRoot": "projects/ngx-bootstrap-popup-demo/src",
+      "projectType": "application",
+      "prefix": "app",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/ngx-bootstrap-popup-demo",
+            "index": "projects/ngx-bootstrap-popup-demo/src/index.html",
+            "main": "projects/ngx-bootstrap-popup-demo/src/main.ts",
+            "polyfills": "projects/ngx-bootstrap-popup-demo/src/polyfills.ts",
+            "tsConfig": "projects/ngx-bootstrap-popup-demo/tsconfig.app.json",
+            "assets": [
+              "projects/ngx-bootstrap-popup-demo/src/favicon.ico",
+              "projects/ngx-bootstrap-popup-demo/src/assets"
+            ],
+            "styles": [
+              "projects/ngx-bootstrap-popup-demo/src/styles.scss"
+            ],
+            "scripts": [
+              "node_modules/jquery/dist/jquery.slim.min.js",
+              "node_modules/popper.js/dist/umd/popper.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+            ],
+            "es5BrowserSupport": true
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/ngx-bootstrap-popup-demo/src/environments/environment.ts",
+                  "with": "projects/ngx-bootstrap-popup-demo/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "ngx-bootstrap-popup-demo:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "ngx-bootstrap-popup-demo:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "ngx-bootstrap-popup-demo:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-bootstrap-popup-demo/src/test.ts",
+            "polyfills": "projects/ngx-bootstrap-popup-demo/src/polyfills.ts",
+            "tsConfig": "projects/ngx-bootstrap-popup-demo/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-bootstrap-popup-demo/karma.conf.js",
+            "styles": [
+              "projects/ngx-bootstrap-popup-demo/src/styles.scss"
+            ],
+            "scripts": [],
+            "assets": [
+              "projects/ngx-bootstrap-popup-demo/src/favicon.ico",
+              "projects/ngx-bootstrap-popup-demo/src/assets"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-bootstrap-popup-demo/tsconfig.app.json",
+              "projects/ngx-bootstrap-popup-demo/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "ngx-bootstrap-popup-demo-e2e": {
+      "root": "projects/ngx-bootstrap-popup-demo-e2e/",
+      "projectType": "application",
+      "prefix": "",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/ngx-bootstrap-popup-demo-e2e/protractor.conf.js",
+            "devServerTarget": "ngx-bootstrap-popup-demo:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "ngx-bootstrap-popup-demo:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "projects/ngx-bootstrap-popup-demo-e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "ngx-bootstrap-popup"
 }
